@@ -3,6 +3,7 @@ package lecho.lib.hellocharts.samples;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,6 +17,7 @@ import java.util.List;
 
 import lecho.lib.hellocharts.animation.ChartAnimationListener;
 import lecho.lib.hellocharts.gesture.ZoomType;
+import lecho.lib.hellocharts.listener.LineChartFlingFinishedListener;
 import lecho.lib.hellocharts.listener.LineChartOnValueSelectListener;
 import lecho.lib.hellocharts.model.Axis;
 import lecho.lib.hellocharts.model.Line;
@@ -46,8 +48,8 @@ public class LineChartActivity extends ActionBarActivity {
 		private LineChartView chart;
 		private LineChartData data;
 		private int numberOfLines = 1;
-		private int maxNumberOfLines = 4;
-		private int numberOfPoints = 12;
+		private int maxNumberOfLines = 12;
+		private int numberOfPoints = 36;
 
 		float[][] randomNumbersTab = new float[maxNumberOfLines][numberOfPoints];
 
@@ -70,7 +72,14 @@ public class LineChartActivity extends ActionBarActivity {
 			View rootView = inflater.inflate(R.layout.fragment_line_chart, container, false);
 
 			chart = (LineChartView) rootView.findViewById(R.id.chart);
+
+            chart.setScrollEnabled(true);
+            chart.setHorizontalScrollBarEnabled(true);
+            chart.setZoomType(ZoomType.HORIZONTAL);
+            chart.setZoomEnabled(false);
+
 			chart.setOnValueTouchListener(new ValueTouchListener());
+            chart.setOnFlingListener(new FlingListener());
 
 			// Generate some randome values.
 			generateValues();
@@ -78,9 +87,12 @@ public class LineChartActivity extends ActionBarActivity {
 			generateData();
 
 			// Disable viewpirt recalculations, see toggleCubic() method for more info.
-			chart.setViewportCalculationEnabled(false);
 
-			resetViewport();
+            chart.setZoomLevel(chart.getMaximumViewport().centerX(), chart.getMaximumViewport().centerY(), 8f);
+
+			//chart.setViewportCalculationEnabled(false);
+
+			//resetViewport();
 
 			return rootView;
 		}
@@ -411,5 +423,13 @@ public class LineChartActivity extends ActionBarActivity {
 			}
 
 		}
+
+        private class FlingListener implements LineChartFlingFinishedListener {
+
+            @Override
+            public void onFlingFinished() {
+                Log.d("Fling", "Fling finished.");
+            }
+        }
 	}
 }

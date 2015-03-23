@@ -94,6 +94,8 @@ public interface Chart {
 
     public void callTouchListener();
 
+    public void callFlingListener();
+
     /**
      * Returns true if chart is interactive.
      *

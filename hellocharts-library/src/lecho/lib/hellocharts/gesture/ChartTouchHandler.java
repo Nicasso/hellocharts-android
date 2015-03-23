@@ -54,7 +54,7 @@ public class ChartTouchHandler {
         this.renderer = chart.getChartRenderer();
         gestureDetector = new GestureDetector(context, new ChartGestureListener());
         scaleGestureDetector = new ScaleGestureDetector(context, new ChartScaleGestureListener());
-        chartScroller = new ChartScroller(context);
+        chartScroller = new ChartScroller(context, this);
         chartZoomer = new ChartZoomer(context, ZoomType.HORIZONTAL_AND_VERTICAL);
     }
 

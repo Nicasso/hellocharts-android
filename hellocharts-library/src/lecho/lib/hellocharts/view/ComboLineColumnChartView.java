@@ -99,6 +99,11 @@ public class ComboLineColumnChartView extends AbstractChartView implements Combo
         }
     }
 
+    @Override
+    public void callFlingListener() {
+
+    }
+
     public ComboLineColumnChartOnValueSelectListener getOnValueTouchListener() {
         return onValueTouchListener;
     }

@@ -95,6 +95,11 @@ public class PieChartView extends AbstractChartView implements PieChartDataProvi
         }
     }
 
+    @Override
+    public void callFlingListener() {
+
+    }
+
     public PieChartOnValueSelectListener getOnValueTouchListener() {
         return onValueTouchListener;
     }

@@ -79,6 +79,11 @@ public class BubbleChartView extends AbstractChartView implements BubbleChartDat
         }
     }
 
+    @Override
+    public void callFlingListener() {
+
+    }
+
     public BubbleChartOnValueSelectListener getOnValueTouchListener() {
         return onValueTouchListener;
     }

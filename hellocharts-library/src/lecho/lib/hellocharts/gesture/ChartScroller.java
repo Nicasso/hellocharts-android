@@ -3,7 +3,9 @@ package lecho.lib.hellocharts.gesture;
 import android.content.Context;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.os.AsyncTask;
 import android.support.v4.widget.ScrollerCompat;
+import android.util.Log;
 
 import lecho.lib.hellocharts.computator.ChartComputator;
 import lecho.lib.hellocharts.model.Viewport;
@@ -16,9 +18,13 @@ public class ChartScroller {
     private Viewport scrollerStartViewport = new Viewport(); // Used only for zooms and flings
     private Point surfaceSizeBuffer = new Point();// Used for scroll and flings
     private ScrollerCompat scroller;
+    private Context c;
+    private ChartTouchHandler touchHandler;
 
-    public ChartScroller(Context context) {
+    public ChartScroller(Context context, ChartTouchHandler touchHandler) {
         scroller = ScrollerCompat.create(context);
+        c = context;
+        this.touchHandler = touchHandler;
     }
 
     public boolean startScroll(ChartComputator computator) {
@@ -114,9 +120,35 @@ public class ChartScroller {
 
         final int width = computator.getContentRectMinusAllMargins().width();
         final int height = computator.getContentRectMinusAllMargins().height();
+
         scroller.fling(startX, startY, velocityX, velocityY, 0, surfaceSizeBuffer.x - width + 1, 0,
                 surfaceSizeBuffer.y - height + 1);
+
+        new isFlingFinished().execute(10);
+
         return true;
+    }
+
+    private class isFlingFinished extends AsyncTask<Integer, Integer, Boolean> {
+
+        protected Boolean doInBackground(Integer... sleepInMilis) {
+            while(!scroller.isFinished()) {
+                try {
+                    Thread.sleep(sleepInMilis[0]);
+                } catch(Exception e) {
+                    Log.d("Thread", "Thread.sleep exception: "+e.getMessage());
+                }
+            }
+            return true;
+        }
+
+        protected void onProgressUpdate(Integer... progress) {
+            // Can we remove this? We do not need it.
+        }
+
+        protected void onPostExecute(Boolean result) {
+            touchHandler.chart.callFlingListener();
+        }
     }
 
     public static class ScrollResult {

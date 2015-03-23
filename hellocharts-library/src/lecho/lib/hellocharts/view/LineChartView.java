@@ -5,7 +5,9 @@ import android.util.AttributeSet;
 import android.util.Log;
 
 import lecho.lib.hellocharts.BuildConfig;
+import lecho.lib.hellocharts.listener.DummyLineChartFlingFinishedListener;
 import lecho.lib.hellocharts.listener.DummyLineChartOnValueSelectListener;
+import lecho.lib.hellocharts.listener.LineChartFlingFinishedListener;
 import lecho.lib.hellocharts.listener.LineChartOnValueSelectListener;
 import lecho.lib.hellocharts.model.ChartData;
 import lecho.lib.hellocharts.model.LineChartData;
@@ -24,6 +26,7 @@ public class LineChartView extends AbstractChartView implements LineChartDataPro
     private static final String TAG = "LineChartView";
     protected LineChartData data;
     protected LineChartOnValueSelectListener onValueTouchListener = new DummyLineChartOnValueSelectListener();
+    protected LineChartFlingFinishedListener onFlingListener = new DummyLineChartFlingFinishedListener();
 
     public LineChartView(Context context) {
         this(context, null, 0);
@@ -77,6 +80,12 @@ public class LineChartView extends AbstractChartView implements LineChartDataPro
         }
     }
 
+    @Override
+    public void callFlingListener() {
+        onFlingListener.onFlingFinished();
+    }
+
+
     public LineChartOnValueSelectListener getOnValueTouchListener() {
         return onValueTouchListener;
     }
@@ -84,6 +93,16 @@ public class LineChartView extends AbstractChartView implements LineChartDataPro
     public void setOnValueTouchListener(LineChartOnValueSelectListener touchListener) {
         if (null != touchListener) {
             this.onValueTouchListener = touchListener;
+        }
+    }
+
+    public LineChartFlingFinishedListener getOnFlingListener() {
+        return onFlingListener;
+    }
+
+    public void setOnFlingListener(LineChartFlingFinishedListener flingListener) {
+        if (null != flingListener) {
+            this.onFlingListener = flingListener;
         }
     }
 }
